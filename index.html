@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Food Truck Reviews</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <link rel="icon" href="favicon.png">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <div id="usr_msg">
+                <div id="msg_content"></div>
+                <div id="close_btn">X</div>
+            </div>
+            <div class="headings">
+                <div>
+                    <h1>Your Truck Reviews</h1>
+                    <h2>Save your ratings and reviews!</h2>
+                </div>
+                <img src="./truck_icon.png" alt="truck icon">
+            </div>
+
+            <div class="login_form" id="signup_form">
+                <h3>Sign Up</h3>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email">
+
+                <label for="fname">First Name</label>
+                <input type="text" id="fname" name="fname">
+
+                <label for="lname">Last Name</label>
+                <input type="text" id="lname" name="lname">
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+                
+                <button id="signin_btn" class="btn">Sign Up</button>
+            </div>
+
+            <div class="login_form" id="login_form">
+                <h3>Log In</h3>
+                <label for="email_login">Email</label>
+                <input type="email" id="email_login" name="email_login">
+
+                <label for="password_login">Password</label>
+                <input type="password" id="password_login" name="password_login">
+                
+                <button id="login_btn" class="btn">Log In</button>
+            </div>
+
+            <div id="main_form">
+                <div class="container">
+                    <div id="input_form">
+                        <label for="name">Truck Name</label>
+                        <select name="name" id="name">
+                            <option value="1">Charred Local Grill</option>
+                            <option value="2">Chicken Fangers</option>
+                            <option value="3">Dawg House</option>
+                            <option value="4">Hearty Beet</option>
+                            <option value="5">Hook'd on Bowls</option>
+                            <option value="6">Lolo's Buff Bakery</option>
+                            <option value="7">Love Me Foods</option>
+                            <option value="8">Powerhouse</option>
+                            <option value="9">Smoke N Tacos</option>
+                            <option value="10">Tasty Bubby's</option>
+                            <option value="11">Thom's Smokin Grill</option>
+                            <option value="12">We Celebrate</option>
+                            <option value="13">Zeppe's Italian Ice</option>
+                        </select>
+
+                        <label for="type">What did you get?</label>
+                        <input type="text" id="type" name="type">
+
+                        <label for="rating">Rating</label>
+                        <input type="range" min="0" max="5" id="rating" name="rating">
+
+                        <label for="review">Review</label>
+                        <textarea id="review" name="review" rows="5"></textarea>
+
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location">
+
+                        <button id="submit_btn" class="btn">Add</button>
+                    </div>
+                </div>
+            </div>
+            <div id="responses">
+                <h3>Your Reviews</h3>
+                <div id="past_entries">
+
+                </div>
+            </div>
+        </div>
+        <div id="modal_underlay"></div>
+        <div id="modal">
+            <div id="close_modal">X</div>
+            <div id="edit_form">
+                <label for="name">Truck Name</label>
+                <select name="name" id="name">
+                    <option value="1">Charred Local Grill</option>
+                    <option value="2">Chicken Fangers</option>
+                    <option value="3">Dawg House</option>
+                    <option value="4">Hearty Beet</option>
+                    <option value="5">Hook'd on Bowls</option>
+                    <option value="6">Lolo's Buff Bakery</option>
+                    <option value="7">Love Me Foods</option>
+                    <option value="8">Powerhouse</option>
+                    <option value="9">Smoke N Tacos</option>
+                    <option value="10">Tasty Bubby's</option>
+                    <option value="11">Thom's Smokin Grill</option>
+                    <option value="12">We Celebrate</option>
+                    <option value="13">Zeppe's Italian Ice</option>
+                </select>
+
+                <label for="type">Truck type</label>
+                <input type="text" id="type" name="type" value="" required>
+
+                <label for="rating">Rating</label>
+                <input type="range" min="0" max="5" id="rating" name="rating" value="" required>
+
+                <label for="review">Review</label>
+                <textarea id="review" name="review" rows="5" value="" required></textarea>
+
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" value="" required>
+            </div>
+            <button class="btn" id="edit_truck_btn">Save</button>
+            <button class="btn" id="delete_truck_btn">Delete</button>
+        </div>
+        <script src="trucks.js"></script>
+        <script src="users.js"></script>
+    </body>
+</html>

@@ -1,0 +1,397 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300&display=swap');
+
+@font-face {
+    font-family: 'headline';
+    src: url(https://cdn.aerentech.com/css/fonts/LEMONMILK-Regular.otf) format('truetype');
+}
+@font-face {
+    font-family: 'paragraph';
+    src: url(https://cdn.aerentech.com/css/fonts/Questrial-Regular.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'Aeren'; 
+    src: url(https://cdn.aerentech.com/css/fonts/strasua.ttf) format('truetype');
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'paragraph', sans-serif;
+    --green: #00ffae;
+    --black: #101010;
+    --white: #fff;
+    --red: #d41746;
+    --light-gray: rgb(235, 233, 233);
+    --pink: rgb(226, 210, 230);
+}
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #1b1b1b;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--green);
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #5dffcc;
+}
+
+body {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--white);
+    background: radial-gradient(rgb(29, 29, 29) , var(--black));
+    font-size: 1.2rem;
+}
+h1, h2, h3, h4, h5, h6 {
+    text-transform: uppercase;
+    font-family: 'Aeren', sans-serif;
+    font-size: 4rem;
+    font-weight: 300;
+    margin: 12px 0;
+    color: var(--green);
+}
+h2, h3, h4, h5, h6 {
+    color: var(--white);
+    font-family: "heading", sans-serif;
+    font-size: 1.8em;
+}
+.headings {
+    padding: 24px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.headings img {
+    width: 100px;
+    height: auto;
+}
+#wrapper {
+    margin: auto;
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+#main_form {
+    display: none;
+    width: 100%;
+    background: radial-gradient( 
+        circle at 50px 700px,
+        var(--pink),
+        var(--pink) 15%,
+        var(--light-gray) 15%,
+        var(--light-gray) 40%,
+        var(--pink) 40%,
+        var(--pink) 50%,
+        var(--light-gray) 50%,
+        var(--light-gray) 80%,
+        var(--pink) 80%,
+        var(--pink) 90%,
+        var(--light-gray) 90%,
+        var(--light-gray)
+    );
+    box-shadow: 4px 4px 10px #1b1b1b;
+    color: var(--black);
+}
+#responses {
+    display: none;
+    margin: 48px 0;
+    width: 100%;
+    color: var(--white);
+}
+#usr_msg {
+    display: none;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 55px;
+    background-color: var(--green);
+    color: var(--black);
+    border-bottom: 4px solid var(--black);
+}
+#usr_msg #close_btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    height: 5px;
+    width: 5px;
+    cursor: pointer;
+}
+.container {
+    padding: 2em;
+    width: 100%;
+    height: 100%;
+}
+
+/* FORM STYLES */
+#input_form, #edit_form {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    justify-content: center;
+    align-items: flex-start;
+    row-gap: 30px;
+}
+label {
+    text-transform: uppercase;
+}
+input, textarea, select {
+    border: none;
+    outline: none;
+    padding: 24px;
+    background: var(--white);
+    font-size: 1.2rem;
+}
+input:focus, textarea:focus {
+    outline: 1px solid var(--green);
+}
+#submit_btn {
+    background-color: #1b1b1b;
+    padding: 12px;
+    color: white;
+    text-align: center;
+    outline: none;
+    border: none;
+    font-size: 16px;
+    transition: all 0.2s ease-in-out;
+}
+#submit_btn:hover {
+    background-color: #323232;
+}
+
+
+/* ENTRIES STYLES */
+#past_entries {
+    padding: 6px 12px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+.card {
+    width: 300px;
+    height: 300px;
+    border: 2px solid var(--green);
+    padding: 8px;
+    padding-bottom: 30px;
+    margin: 16px;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-start;
+    justify-content: flex-end;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+    position: relative;
+}
+.card:hover {
+    transform: scale(103%);
+}
+.card p {
+    margin: 4px 0;
+}
+.edit_btn_underlay {
+    background: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: all 0.2s ease-in;
+    z-index: 9;
+}
+#edit_btn {
+    display: flex;
+    position: absolute;
+    top: calc(44%);
+    left: calc(26%);
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: all 0.2s ease-in;
+    background-color: var(--black);
+}
+.card .truck_icon {
+    position: absolute;
+    top: -25px;
+    left: 90px;
+    width: 100px;
+    height: auto;
+    transition: all .2s ease-in-out;
+    z-index: 11;
+}
+.card .truck_cuisine {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+.card:hover .truck_icon {
+    transform: scale(150%);
+}
+.card:hover #edit_btn {
+    opacity: 100%;
+}
+.card:hover .edit_btn_underlay {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+
+/* RANGE INPUT STYLES */
+input[type=range] {
+    height: 25px;
+    -webkit-appearance: none;
+    margin: 10px 0;
+    width: 100%;
+}
+input[type=range]:focus {
+    outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    box-shadow: 0px 0px 0px #000000;
+    background: var(--black);
+    border-radius: 1px;
+    border: 0px solid #000000;
+}
+input[type=range]::-webkit-slider-thumb {
+    box-shadow: 0px 0px 0px #000000;
+    border: 1px solid var(--white);
+    height: 18px;
+    width: 18px;
+    border-radius: 25px;
+    background: var(--black);
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -7px;
+}
+input[type=range]::-ms-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+
+/* MODAL STYLES */
+#modal_underlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--light-gray);
+    z-index: 98;
+    opacity: 66%;
+}
+#modal {
+    display: none;
+    width: 80%;
+    height: 90%;
+    background-color: var(--black);
+    box-shadow: 4px 4px 10px #1b1b1b93;
+    color: var(--white);
+    position: fixed;
+    top: 5%;
+    left: 10%;
+    z-index: 99;
+    padding: 64px 48px;
+}
+#close_modal {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    position: absolute;
+    top: 20px;
+    right: 36px;
+    color: #00ffae;
+}
+#close_modal:hover {
+    color: #2fd5ff;
+}
+
+.btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1.5;
+    font-size: 16px;
+    padding: 12px 24px;
+    letter-spacing: 1px;
+    margin: 24px 24px 24px 0;
+
+    box-shadow: inset 0 0 0 2px var(--green);
+    color: var(--green);
+    transition: color 0.25s 0.083s;
+    position: relative;
+}
+.btn:focus {
+    outline: 2px dotted var(--green);   
+}
+.btn:before, 
+.btn:after {
+    border: 0 solid transparent;
+    box-sizing: border-box;
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    width: 0;
+    height: 0;
+
+    bottom: 0;
+    right: 0;
+}
+.btn:before {
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+.btn:after {
+    border-top-width: 2px;
+    border-right-width: 2px;
+}
+.btn:hover{
+    color: #2fd5ff;
+} 
+.btn:hover:after,
+.btn:hover:before {
+    border-color: #2fd5ff;
+    transition: border-color 0s, width 0.25s, height 0.25s;
+    width: 100%;
+    height: 100%;
+}
+.btn:hover:before {
+    transition-delay: 0s, 0s, 0.25s;
+}
+.btn:hover:after {
+    transition-delay: 0s, 0.25s, 0s;
+}
+
+#delete_truck_btn:hover {
+    color: #ff1e56;
+}  
+#delete_truck_btn:hover:after,
+#delete_truck_btn:hover:before {
+    border-color: #ff1e56;
+}
