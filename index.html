@@ -18,11 +18,12 @@
                 <div>
                     <h1>Your Truck Reviews</h1>
                     <h2>Save your ratings and reviews!</h2>
+                    <a href="#" id="logout">Log Out</a>
                 </div>
                 <img src="./truck_icon.png" alt="truck icon">
             </div>
 
-            <div class="login_form" id="signup_form">
+            <div class="login_form" id="signup_form" style="display: none;">
                 <h3>Sign Up</h3>
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email">
@@ -37,6 +38,7 @@
                 <input type="password" id="password" name="password">
                 
                 <button id="signin_btn" class="btn">Sign Up</button>
+                <div class="switch_login">Log In</div>
             </div>
 
             <div class="login_form" id="login_form">
@@ -48,6 +50,7 @@
                 <input type="password" id="password_login" name="password_login">
                 
                 <button id="login_btn" class="btn">Log In</button>
+                <div class="switch_login">Sign Up</div>
             </div>
 
             <div id="main_form">
@@ -89,6 +92,10 @@
             <div id="responses">
                 <h3>Your Reviews</h3>
                 <div id="past_entries">
+
+                </div>
+                <h3>All Reviews</h3>
+                <div id="your_past_entries">
 
                 </div>
             </div>

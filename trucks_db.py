@@ -12,10 +12,10 @@ class TrucksDB:
         # Allow queries and get data back from connection
         self.cursor = self.connection.cursor()
 
-    def create_truck(self, name, type, rating, review, location):
+    def create_truck(self, name, type, rating, review, location, user):
         # Prevent SQL injection
-        data = [name, type, rating, review, location]
-        self.cursor.execute("INSERT INTO trucks (name, type, rating, review, location) VALUES (?, ?, ?, ?, ?)", data)
+        data = [name, type, rating, review, location, user]
+        self.cursor.execute("INSERT INTO trucks (name, type, rating, review, location, user_id) VALUES (?, ?, ?, ?, ?, ?)", data)
 
         # Have to commit after any write operation
         self.connection.commit()
@@ -43,6 +43,12 @@ class TrucksDB:
 
     def get_all_trucks(self):
         self.cursor.execute("SELECT * FROM trucks")
+        # Now that have executed, give all data that matched query
+        return self.cursor.fetchall()
+
+    def get_all_trucks_from_user(self, id):
+        data = [id]
+        self.cursor.execute("SELECT * FROM trucks WHERE user_id = ?", data)
         # Now that have executed, give all data that matched query
         return self.cursor.fetchall()
 

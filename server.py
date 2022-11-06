@@ -23,7 +23,10 @@ class MyRequestHandler(BaseHTTPRequestHandler):
 
     def send_cookie(self):
         for morsel in self.cookie.values():
-            self.send_header("Set-Cookie", f"{morsel.OutputString()}; SameSite=None; Secure")
+            if "Postman" not in self.headers["User-Agent"]:
+                morsel["samesite"] = "None"
+                morsel["secure"] = True
+            self.send_header("Set-Cookie", morsel.OutputString())
 
     def load_session(self):
         # CALLED AT THE TOP OF ALL DO FUNCTIONS
@@ -82,12 +85,16 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
         trucks_db = TrucksDB()
+        users_db = UsersDB()
         all_trucks = trucks_db.get_all_trucks()
+        for truck in all_trucks:
+            truck["user_id"] = users_db.get_user_by_id(truck["user_id"])["fname"]
+        print(all_trucks)
         truck_meta = trucks_db.get_all_trucks_meta()
         all_data = {"mytrucks": all_trucks, "metadata": truck_meta}
         self.wfile.write(bytes(json.dumps(all_data), 'utf-8'))
 
-    def handle_find_truck(self, id):
+    def handle_find_users_trucks(self):
         if "userId" not in self.session_data:
             self.handle_401()
             return
@@ -95,6 +102,18 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", 'application/json')
         self.end_headers()
 
+        trucks_db = TrucksDB()
+        all_trucks = trucks_db.get_all_trucks_from_user(self.session_data["userId"])
+        truck_meta = trucks_db.get_all_trucks_meta()
+        users_db = UsersDB()
+        user = users_db.get_user_by_id(self.session_data["userId"])
+        all_data = {"mytrucks": all_trucks, "metadata": truck_meta, "user": user}
+        self.wfile.write(bytes(json.dumps(all_data), 'utf-8'))
+
+    def handle_find_truck(self, id):
+        if "userId" not in self.session_data:
+            self.handle_401()
+            return
         trucks_db = TrucksDB()
         truck = trucks_db.get_truck(id)
         if truck:
@@ -126,7 +145,9 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                     "location": parsed_body["location"][0]
                 }
                 trucks_db = TrucksDB()
-                trucks_db.create_truck(arr["name"], arr["type"], arr["rating"], arr["review"], arr["location"])
+                users_db = UsersDB()
+                name = users_db.get_user_by_id(self.session_data["userId"])
+                trucks_db.create_truck(arr["name"], arr["type"], arr["rating"], arr["review"], arr["location"], name["id"])
 
                 self.send_response(201)
                 self.end_headers()
@@ -137,6 +158,11 @@ class MyRequestHandler(BaseHTTPRequestHandler):
 
     def handle_edit_truck(self, id):
         if "userId" not in self.session_data:
+            self.handle_401()
+            return
+        trucks_db = TrucksDB()
+        found = trucks_db.get_truck(id)
+        if found["user_id"] != self.session_data["userId"]:
             self.handle_401()
             return
 
@@ -154,8 +180,6 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                     "review": parsed_body["review"][0],
                     "location": parsed_body["location"][0]
                 }
-                trucks_db = TrucksDB()
-                found = trucks_db.get_truck(id)
                 if found:
                     trucks_db.edit_truck(id, arr["name"], arr["type"], arr["rating"], arr["review"], arr["location"])
                     self.send_response(200)
@@ -171,41 +195,18 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         if "userId" not in self.session_data:
             self.handle_401()
             return
-
         trucks_db = TrucksDB()
         found = trucks_db.get_truck(id)
+        if found["user_id"] != self.session_data["userId"]:
+            self.handle_401()
+            return
+
         if found:
             trucks_db.delete_truck(id) 
             self.send_response(200)
             self.end_headers()
         else: 
-            self.handle_not_found() 
-
-    def handle_delete_user(self, id):
-        users_db = UsersDB()
-        found = users_db.get_user(id)
-        if found:
-            users_db.delete_user(id) 
-            self.send_response(200)
-            self.end_headers()
-        else: 
             self.handle_not_found()        
-
-    def handle_find_all_users(self):
-        # 1) Gets reinstantiated for every GET method request, removed when done
-        self.send_response(200)
-        
-        # 2) Send any headers
-        self.send_header("Content-Type", 'application/json')
-        
-        # 3) Finalize any headers
-        self.end_headers()
-
-        # 4) Write to the response body
-        users_db = UsersDB()
-        all_users = users_db.get_all_users()
-        all_data = {"users": all_users}
-        self.wfile.write(bytes(json.dumps(all_data), 'utf-8'))
 
     def handle_find_user(self, id):
         user_db = UsersDB()
@@ -264,7 +265,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                         self.send_response(201)
                         self.send_header("Content-Type", 'text/plain')
                         self.end_headers()
-                        self.wfile.write(bytes("You're now signed in!", 'utf-8'))
+                        self.wfile.write(bytes(json.dumps(user['id']), 'utf-8'))
                     else:
                         self.send_response(401)
                         self.send_header("Content-Type", 'text/plain')
@@ -272,12 +273,18 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                         self.wfile.write(bytes("User credentials bad", 'utf-8'))
                 else:
                     self.handle_bad_data()
-                    # 401
             else:
                 self.handle_bad_data()
-                # 401
         else:
             self.handle_bad_data()
+
+    def handle_logout(self):
+        if "userId" not in self.session_data:
+            self.handle_401()
+            return
+        self.session_data.pop("userId")
+        self.send_response(201)
+        self.end_headers()
 
     def do_OPTIONS(self):
         self.load_session()
@@ -329,20 +336,28 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         parts = self.path.split("/")
         collection = parts[1]
         member_id = None
+        user_id = None
+        if "?user=" in collection:
+            user_id = collection.split("=")[1]
+            collection = collection.split("?")[0]
         if len(parts) > 2:
             member_id = parts[2]
         if collection == "trucks":
             if member_id:
                 # Retrieve specific member
                 self.handle_find_truck(member_id)
+            elif user_id:
+                print("FOR SPECIFIC USER")
+                self.handle_find_users_trucks()
             else:
                 # Retrieve entire collection
+                print("FIND ALL TRUCKS")
                 self.handle_find_all_trucks()
         elif collection == 'users':
             if member_id:
                 self.handle_find_user(member_id)
             else:
-                self.handle_find_all_users()
+                 self.handle_not_found()
         else:
             self.handle_not_found()
 
@@ -354,6 +369,8 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             self.handle_create_user()
         elif self.path == "/sessions":
             self.handle_create_session()
+        elif self.path == "/logout":
+            self.handle_logout()
         else:
             self.handle_not_found()
 

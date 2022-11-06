@@ -30,11 +30,12 @@ class UsersDB:
         self.cursor.execute("DELETE FROM users WHERE id=?", data)
         self.connection.commit()
 
+    def get_user_by_id(self, id):
+        data = [id]
+        self.cursor.execute("SELECT id, fname FROM users WHERE id = ?", data)
+        return self.cursor.fetchone()
+
     def get_user_by_email(self, email):
         data = [email]
         self.cursor.execute("SELECT * FROM users WHERE email = ?", data)
         return self.cursor.fetchone()
-
-    def get_all_users(self):
-        self.cursor.execute("SELECT * FROM users")
-        return self.cursor.fetchall()

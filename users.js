@@ -1,3 +1,40 @@
+function toggleLogin() {
+    var logIn = document.getElementById("login_form");
+    var signUp = document.getElementById("signup_form");
+    console.log(logIn.style.display, signUp.style.display);
+    if (signUp.style.display == 'none') {
+        logIn.style.display = 'none';
+        signUp.style.display = 'grid';
+    } else {
+        logIn.style.display = 'grid';
+        signUp.style.display = 'none';
+    }
+}
+
+for (btn of document.querySelectorAll(".switch_login")) {
+    btn.onclick = toggleLogin;
+}
+
+
+function logoutUser() {
+    var requestOptions = {
+        method: "POST",
+        credentials: "include",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+    }
+    fetch('http://localhost:8080/logout', requestOptions).then((response) => {
+        if (response.status == 201) {
+            location.reload();
+        } else {
+            usrMsg.querySelector("#msg_content").innerHTML = "Unable to log out at this time :(";
+            usrMsg.style.display = "flex";
+            usrMsg.style.backgroundColor = "#d41746";
+        }
+    });
+}
+document.getElementById("logout").onclick = logoutUser;
+
+
 var usrMsg = document.querySelector("#usr_msg");
 
 document.getElementById("signin_btn").onclick = function () {
@@ -7,6 +44,7 @@ document.getElementById("signin_btn").onclick = function () {
     var password = document.querySelector("#password").value;
     createUserOnServer(email, fname, lname, password);
 }
+
 document.getElementById("login_btn").onclick = function () {
     var email = document.querySelector("#email_login").value;
     var password = document.querySelector("#password_login").value;
@@ -28,6 +66,7 @@ function login(email, password) {
             usrMsg.querySelector("#msg_content").innerHTML = "You are now logged in!";
             usrMsg.style.display = "flex";
             usrMsg.style.backgroundColor = "#00ffae";
+            console.log(response.text)
             loadTrucksFromServer();
         } else {
             usrMsg.querySelector("#msg_content").innerHTML = "You entered the wrong email or password :(";

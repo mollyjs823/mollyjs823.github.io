@@ -1,5 +1,3 @@
-var truckNames = [];
-
 function loadTrucksFromServer() {
     var requestOptions = {
         credentials: "include"
@@ -7,11 +5,13 @@ function loadTrucksFromServer() {
     fetch('http://localhost:8080/trucks', requestOptions).then((response) => {
         response.json().then((data) => {
             if (response.status == 200) {
-                trucks = data.mytrucks;
-                console.log(trucks);
-                meta = data.metadata;
-                var container = document.getElementById("past_entries");
+                console.log(data);
+                var trucks = data.mytrucks;
+                var meta = data.metadata;
+
+                var container = document.getElementById("your_past_entries");
                 container.innerHTML = "";
+
                 trucks.forEach(function (truck) {
                     for ([key, value] of Object.entries(meta)) {
                         if (value.id == truck.name) {
@@ -21,9 +21,9 @@ function loadTrucksFromServer() {
                     }
     
                     var newItem = document.createElement("div");
-                    newItem.setAttribute("onclick", `loadSingleTruckFromServer('${truck.id}')`);
                     newItem.classList.add("card");
                     for ([key, attr] of Object.entries(truck)) {
+                        user = truck.user_id;
                         if (key == 'id') {
                             newItem.innerHTML += `<img src='./truck_icons/${meta[truckIndex].slug}.png' alt='truck icon' class='truck_icon'/>`;
                             newItem.innerHTML += `<p class="truck_cuisine">${meta[truckIndex].cuisine}</p>`;
@@ -33,14 +33,68 @@ function loadTrucksFromServer() {
                                 str += "...";
                             }
                             newItem.innerHTML += `<p><strong>${key.toUpperCase()}:</strong> ${str}</p>`;
+                        } else if (key == "user_id") {
+                            newItem.innerHTML += `<p><strong>POSTED BY:</strong> ${user}</p>`;
                         } else {
                             newItem.innerHTML += `<p><strong>${key.toUpperCase()}:</strong> ${attr}</p>`;
                         }
                     }
-                    newItem.innerHTML += `<div class="edit_btn_underlay"></div><div class="btn" id="edit_btn">Edit Review</div>`;
                     container.appendChild(newItem);
-                    truckNames.push(truck);
                 });
+
+                displayContent();
+            }
+            loadYourTrucksFromServer();
+            return response.status;
+        })
+        .catch((error) => {
+            console.log("ERROR:", error, response.status);
+        });
+    });
+}
+
+function loadYourTrucksFromServer() {
+    var requestOptions = {
+        credentials: "include"
+    }
+    fetch('http://localhost:8080/trucks?user=True', requestOptions).then((response) => {
+        response.json().then((data) => {
+            if (response.status == 200) {
+                var trucks = data.mytrucks;
+                var meta = data.metadata;
+
+                var yourContainer = document.getElementById("past_entries");
+                yourContainer.innerHTML = "";
+
+                trucks.forEach(function (truck) {
+                    for ([key, value] of Object.entries(meta)) {
+                        if (value.id == truck.name) {
+                            var truckIndex = key;
+                            truck.name = value.name;
+                        }
+                    }
+    
+                    var yourItem = document.createElement("div");
+                    yourItem.setAttribute("onclick", `loadSingleTruckFromServer('${truck.id}')`);
+                    yourItem.classList.add("card");
+                    for ([key, attr] of Object.entries(truck)) {
+                        if (key == 'id') {
+                            yourItem.innerHTML += `<img src='./truck_icons/${meta[truckIndex].slug}.png' alt='truck icon' class='truck_icon'/>`;
+                            yourItem.innerHTML += `<p class="truck_cuisine">${meta[truckIndex].cuisine}</p>`;
+                        } else if (key == 'type' || key == 'review') {
+                            str = attr.substring(0, 27);
+                            if (str.length >= 27) {
+                                str += "...";
+                            }
+                            yourItem.innerHTML += `<p><strong>${key.toUpperCase()}:</strong> ${str}</p>`;
+                        } else if (key != "user_id") {
+                            yourItem.innerHTML += `<p><strong>${key.toUpperCase()}:</strong> ${attr}</p>`;
+                        }
+                    }
+                    yourItem.innerHTML += `<div class="edit_btn_underlay"></div><div class="btn" id="edit_btn">Edit Review</div>`;
+                    yourContainer.appendChild(yourItem);
+                });
+
                 displayContent();
             }
             return response.status;
@@ -57,6 +111,7 @@ function loadSingleTruckFromServer(id) {
     }
     fetch(`http://localhost:8080/trucks/${id}`, requestOptions).then((response) => {
         response.json().then((data) => {
+            if (response.status == 200) {
             truck = data.mytruck;
             meta = data.metadata;
             for ([key, value] of Object.entries(meta)) {
@@ -64,7 +119,6 @@ function loadSingleTruckFromServer(id) {
                     truck.name = value.name;
                 }
             }
-
             var container = document.getElementById("modal");
             container.style.display = "block";
             document.getElementById("modal_underlay").style.display = "block";
@@ -88,6 +142,9 @@ function loadSingleTruckFromServer(id) {
                 var location = form.querySelector("#location").value;
                 editSingleTruck(truck.id, name, type, rating, review, location);
             }
+        }})
+        .catch((error) => {
+            console.log("ERROR:", error, response.status);
         });
     });
 }
@@ -151,6 +208,8 @@ function createTruckOnServer(name, type, rating, review, location) {
         document.querySelector("#review").value = '';
         document.querySelector("#rating").value = '';
         document.querySelector("#location").value = '';
+    }).catch((error) => {
+        console.log(error);
     });
 }
 
