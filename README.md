@@ -57,6 +57,7 @@ Retrieve truck member      | GET          | /trucks/*\<id\>*
 Create truck member        | POST         | /trucks
 Update truck member        | PUT          | /trucks/*\<id\>*
 Delete truck member        | DELETE       | /trucks/*\<id\>*
+Retrieve user collection   | GET          | /users
 Retrieve single user       | GET          | /users/*<id\>*
 Create single user         | POST         | /users
 Log user in/ Create session| POST         | /sessions
