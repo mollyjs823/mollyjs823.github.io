@@ -66,7 +66,7 @@ function login(email, password) {
             usrMsg.querySelector("#msg_content").innerHTML = "You are now logged in!";
             usrMsg.style.display = "flex";
             usrMsg.style.backgroundColor = "#00ffae";
-            console.log(response.text)
+            console.log(response.text);
             loadTrucksFromServer();
         } else {
             usrMsg.querySelector("#msg_content").innerHTML = "You entered the wrong email or password :(";

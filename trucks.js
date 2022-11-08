@@ -5,6 +5,7 @@ function loadTrucksFromServer() {
     fetch('http://localhost:8080/trucks', requestOptions).then((response) => {
         response.json().then((data) => {
             if (response.status == 200) {
+                document.getElementById("logout").style.display = "block";
                 console.log(data);
                 var trucks = data.mytrucks;
                 var meta = data.metadata;

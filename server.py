@@ -322,12 +322,6 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                 self.handle_delete_truck(member_id)
             else:
                 self.handle_not_found()
-        elif collection == "users":
-            if member_id:
-                # Delete specific member
-                self.handle_delete_user(member_id)
-            else:
-                self.handle_not_found()
         else:
             self.handle_not_found()
 

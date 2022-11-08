@@ -10,7 +10,15 @@ Attributes:
 * review (string)
 * location (string)
 
-## Schema
+**User**
+Attributes: 
+* email (string)
+* fname (string)
+* lname (integer)
+* enc_password (string)
+
+
+## Trucks Schema
 ```sql
 CREATE TABLE trucks (
 id INTEGER PRIMARY KEY,
@@ -19,6 +27,25 @@ type TEXT,
 rating INTEGER,
 review TEXT,
 location TEXT);
+```
+
+```sql
+CREATE TABLE truck_metadata (
+id INTEGER PRIMARY KEY, 
+slug TEXT, 
+name TEXT, 
+cuisine);
+```
+
+
+## Users Schema
+```sql
+CREATE TABLE users (
+id INTEGER PRIMARY KEY, 
+email TEXT, 
+fname TEXT, 
+lname TEXT, 
+enc_password TEXT);
 ```
 
 ## REST Endpoints
@@ -30,4 +57,8 @@ Retrieve truck member      | GET          | /trucks/*\<id\>*
 Create truck member        | POST         | /trucks
 Update truck member        | PUT          | /trucks/*\<id\>*
 Delete truck member        | DELETE       | /trucks/*\<id\>*
+Retrieve single user       | GET          | /users/*<id\>*
+Create single user         | POST         | /users/
 
+## Password hashing method
+Bcrypt hashing

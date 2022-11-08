@@ -135,6 +135,11 @@ h2, h3, h4, h5, h6 {
     width: 100%;
     height: 100%;
 }
+#logout {
+    text-decoration: none;
+    color: var(--green);
+    display: none;
+}
 
 /* LOGIN STYLES */
 .login_form {
@@ -146,7 +151,7 @@ h2, h3, h4, h5, h6 {
     align-items: center;
 }
 .login_form h3 {
-    grid-column: 1 / -1;
+    grid-column: 2;
     text-align: center;
     margin-bottom: 24px;
 }
