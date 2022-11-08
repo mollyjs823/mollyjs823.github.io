@@ -1,6 +1,6 @@
 # Resourceful
 
-## Resource
+## Resources
 **Food truck**
 
 Attributes: 
@@ -10,6 +10,7 @@ Attributes:
 * review (string)
 * location (string)
 
+**Food truck**
 **User**
 Attributes: 
 * email (string)
