@@ -220,6 +220,22 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         else:
             self.handle_not_found()
 
+    def handle_find_all_users(self):
+        # 1) Gets reinstantiated for every GET method request, removed when done
+        self.send_response(200)
+
+        # 2) Send any headers
+        self.send_header("Content-Type", 'application/json')
+
+        # 3) Finalize any headers
+        self.end_headers()
+
+        # 4) Write to the response body
+        users_db = UsersDB()
+        all_users = users_db.get_all_users()
+        all_data = {"users": all_users}
+        self.wfile.write(bytes(json.dumps(all_data), 'utf-8'))
+
     def handle_create_user(self):
         length = self.headers['Content-Length']
 
@@ -351,7 +367,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             if member_id:
                 self.handle_find_user(member_id)
             else:
-                 self.handle_not_found()
+                self.handle_find_all_users()
         else:
             self.handle_not_found()
 

@@ -39,3 +39,7 @@ class UsersDB:
         data = [email]
         self.cursor.execute("SELECT * FROM users WHERE email = ?", data)
         return self.cursor.fetchone()
+
+    def get_all_users(self):
+        self.cursor.execute("SELECT * FROM users")
+        return self.cursor.fetchall()
