@@ -1,8 +1,10 @@
+const BASE_URL = 'https://hidden-meadow-42569.herokuapp.com';
+
 function loadTrucksFromServer() {
     var requestOptions = {
         credentials: "include"
     }
-    fetch('http://localhost:8080/trucks', requestOptions).then((response) => {
+    fetch(`${BASE_URL}/trucks`, requestOptions).then((response) => {
         response.json().then((data) => {
             if (response.status == 200) {
                 document.getElementById("logout").style.display = "block";
@@ -58,7 +60,7 @@ function loadYourTrucksFromServer() {
     var requestOptions = {
         credentials: "include"
     }
-    fetch('http://localhost:8080/trucks?user=True', requestOptions).then((response) => {
+    fetch(`${BASE_URL}/trucks?user=True`, requestOptions).then((response) => {
         response.json().then((data) => {
             if (response.status == 200) {
                 var trucks = data.mytrucks;
@@ -110,7 +112,7 @@ function loadSingleTruckFromServer(id) {
     var requestOptions = {
         credentials: "include"
     }
-    fetch(`http://localhost:8080/trucks/${id}`, requestOptions).then((response) => {
+    fetch(`${BASE_URL}/trucks/${id}`, requestOptions).then((response) => {
         response.json().then((data) => {
             if (response.status == 200) {
             truck = data.mytruck;
@@ -157,7 +159,7 @@ function deleteSingleTruck(id) {
             method: "DELETE",
             credentials: "include"
         }
-        fetch(`http://localhost:8080/trucks/${id}`, requestOptions).then((response) => {
+        fetch(`${BASE_URL}/trucks/${id}`, requestOptions).then((response) => {
             loadTrucksFromServer();
         });
     }
@@ -172,7 +174,7 @@ function editSingleTruck(id, name, type, rating, review, location) {
         credentials: "include",
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
     }
-    fetch(`http://localhost:8080/trucks/${id}`, requestOptions).then((response) => {
+    fetch(`${BASE_URL}/trucks/${id}`, requestOptions).then((response) => {
         loadTrucksFromServer();
     });
 }
@@ -202,7 +204,7 @@ function createTruckOnServer(name, type, rating, review, location) {
         credentials: "include",
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
     }
-    fetch('http://localhost:8080/trucks', requestOptions).then((response) => {
+    fetch(`${BASE_URL}/trucks`, requestOptions).then((response) => {
         loadTrucksFromServer();
         document.querySelector("#name").value = '';
         document.querySelector("#type").value = '';

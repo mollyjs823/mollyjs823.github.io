@@ -1,3 +1,5 @@
+const BASE_URL = 'https://hidden-meadow-42569.herokuapp.com';
+
 function toggleLogin() {
     var logIn = document.getElementById("login_form");
     var signUp = document.getElementById("signup_form");
@@ -22,7 +24,7 @@ function logoutUser() {
         credentials: "include",
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
     }
-    fetch('http://localhost:8080/logout', requestOptions).then((response) => {
+    fetch(`${BASE_URL}/logout`, requestOptions).then((response) => {
         if (response.status == 201) {
             location.reload();
         } else {
@@ -59,7 +61,7 @@ function login(email, password) {
         credentials: "include",
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
     }
-    fetch('http://localhost:8080/sessions', requestOptions).then((response) => {
+    fetch(`${BASE_URL}/sessions`, requestOptions).then((response) => {
         document.querySelector("#email_login").value = '';
         document.querySelector("#password_login").value = '';
         if (response.status == 201) {
@@ -84,7 +86,7 @@ function createUserOnServer(email, fname, lname, password) {
         credentials: "include",
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
     }
-    fetch('http://localhost:8080/users', requestOptions).then((response) => {
+    fetch(`${BASE_URL}/users`, requestOptions).then((response) => {
         if (response.status == 201) {
             document.querySelector("#email").value = '';
             document.querySelector("#fname").value = '';
