@@ -1,5 +1,3 @@
-const BASE_URL = 'https://hidden-meadow-42569.herokuapp.com';
-
 function toggleLogin() {
     var logIn = document.getElementById("login_form");
     var signUp = document.getElementById("signup_form");
