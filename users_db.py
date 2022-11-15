@@ -21,23 +21,23 @@ class UsersDB:
             return False
         password = bcrypt.hash(password)
         data = [email, fname, lname, password]
-        self.cursor.execute("INSERT INTO users (email, fname, lname, enc_password) VALUES (?, ?, ?, ?)", data)
+        self.cursor.execute("INSERT INTO users (email, fname, lname, enc_password) VALUES (%s, %s, %s, %s)", data)
         self.connection.commit()
         return True
 
     def delete_user(self, id):
         data = [id]
-        self.cursor.execute("DELETE FROM users WHERE id=?", data)
+        self.cursor.execute("DELETE FROM users WHERE id=%s", data)
         self.connection.commit()
 
     def get_user_by_id(self, id):
         data = [id]
-        self.cursor.execute("SELECT id, fname FROM users WHERE id = ?", data)
+        self.cursor.execute("SELECT id, fname FROM users WHERE id = %s", data)
         return self.cursor.fetchone()
 
     def get_user_by_email(self, email):
         data = [email]
-        self.cursor.execute("SELECT * FROM users WHERE email = ?", data)
+        self.cursor.execute("SELECT * FROM users WHERE email = %s", data)
         return self.cursor.fetchone()
 
     def get_all_users(self):

@@ -1,4 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import sys
 from http import cookies
 from session_store import SessionStore
 from passlib.hash import bcrypt
@@ -390,9 +391,15 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
 
 
 def run():
-    listen = ('127.0.0.1', 8080)
+    db = TrucksDB()
+    db.create_trucks_table()
+    db = None # disconnect
+
+    port = 8080
+    if len(sys.argv) > 1:
+        port = int(sys.argv[1])
+    listen = ("0.0.0.0", port)
     server = ThreadedHTTPServer(listen, MyRequestHandler)
-    print("Server running")
     server.serve_forever()
 
 if __name__ == '__main__':
