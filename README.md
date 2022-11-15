@@ -34,7 +34,7 @@ CREATE TABLE truck_metadata (
 id INTEGER PRIMARY KEY, 
 slug TEXT, 
 name TEXT, 
-cuisine);
+cuisine TEXT);
 ```
 
 

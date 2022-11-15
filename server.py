@@ -391,9 +391,13 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
 
 
 def run():
-    db = TrucksDB()
-    db.create_trucks_table()
-    db = None # disconnect
+    dbT = TrucksDB()
+    dbU = UsersDB()
+    dbT.create_trucks_table()
+    dbT.create_trucksmeta_table()
+    dbU.create_users_table()
+    dbT = None # disconnect
+    dbU = None
 
     port = 8080
     if len(sys.argv) > 1:
