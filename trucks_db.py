@@ -30,7 +30,7 @@ class TrucksDB:
         self.connection.close()
 
     def create_trucks_table(self):
-        self.cursor.execute("CREATE TABLE IF NOT EXISTS trucks (id SERIAL PRIMARY KEY, name VARCHAR(255), type VARCHAR(255), rating INT, review VARCHAR(255), location VARCHAR(255))")
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS trucks (id SERIAL PRIMARY KEY, name VARCHAR(255), type VARCHAR(255), rating INT, review VARCHAR(255), location VARCHAR(255), user_id INT)")
         self.connection.commit()
 
     def create_trucksmeta_table(self):
